@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.6
+    volumes:
+      - ./tmp/db:/var/lib/mysql/data
+      - ./mysql/my.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: database_development
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: root
+  web:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
